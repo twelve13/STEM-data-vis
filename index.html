@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>STEM stats</title>
+		<link rel="stylesheet" href="style.css">
+	</head>
+	<body>
+		<h1>Freshmen intending to major in science and engineering</h1>
+		<a href="https://www.nsf.gov/statistics/seind14/content/chapter-2/at02-16.pdf" target="_blank">Source</a>
+		<main>
+			<div id="instructions">Choose from the options on the left</div>
+			<div id="control-panel">
+				<div class="button-panel">
+					<div class="category">Gender</div>
+					<div class="button" id="button1">Females</div>
+					<div class="button" id="button2">Males</div>
+				</div>
+				<div class="button-panel">
+					<div class="category">Race</div>
+					<div class="button" id="button3">Caucasian</div>
+					<div class="button" id="button4">African American</div>
+					<div class="button" id="button5">Asian</div>
+					<div class="button" id="button6">Latino</div>
+					<div class="button" id="button7">Native American</div>
+				</div>
+				<div class="button" id="clear-all">Clear all</div>
+			</div>
+			<div class="container" id="data-vis-container"></div>
+		</main>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="https://code.highcharts.com/highcharts.js"></script>
+		<script>
+			const colorPalette = ["red", "orange", "yellow", "green", "aqua", "blue", "purple"];
+
+			Highcharts.setOptions({
+				colors: colorPalette
+			})
+
+			const stemDataVis = Highcharts.chart('data-vis-container', {
+				chart: {
+					type: 'line',
+					ignoreHiddenSeries: false //prevents axes from automatically rescaling with hidden series
+				},
+				title: {
+					text: "Freshmen intending S&E major, by field, sex, and race or ethnicity: 2012"
+				},
+				legend: {
+					enabled: false //don't show the legend
+				},
+				xAxis: {
+					categories: [
+						"Physical sciences",
+						"Biological/agricultural sciences",
+						"Mathematics/statistics/computer sciences",
+						"Social/behavior sciences",
+						"Engineering"
+					]
+				},
+				yAxis: {
+					title: {
+						text: "Percent"
+					}
+				},
+				series: [{
+					id: "series1",
+					name: "Females",
+					data: [1.9, 14.3, 1.4, 12.0, 3.9]
+				}, {
+					id: "series2",
+					name: "Males",
+					data: [3.1, 10.8, 5.2, 8.4, 18.3]
+				},  {
+					id: "series3",
+					name: "White or Caucasian",
+					data: [2.6, 11.8, 2.8, 9.4, 10.4]
+				}, {
+					id: "series4",
+					name: "African American or black",
+					data: [1.6, 12.5, 3.2, 11.6, 7.5]
+				}, {
+					id: "series5",
+					name: "Asian American or Asian",
+					data: [2.8, 20.3, 5.6, 9.0, 15.0]
+				}, {
+					id: "series6",
+					name: "Hispanic or Latino",
+					data: [1.6, 12.9, 2.9, 14.1, 10.1]
+				}, {
+					id: "series7",
+					name: "American Indian or Alaska Native",
+					data: [1.7, 12, 0.8, 9.9, 8.6]
+				}]
+			});
+
+			const series = stemDataVis.series;
+
+			for(let i=0; i<series.length; i++) {
+				series[i].hide();
+			}
+
+			let series1hidden = true;
+			let series2hidden = true;
+			let series3hidden = true;
+			let series4hidden = true;
+			let series5hidden = true;
+			let series6hidden = true;
+			let series7hidden = true;
+
+			const series1 = stemDataVis.get("series1");
+			const series2 = stemDataVis.get("series2");
+			const series3 = stemDataVis.get("series3");
+			const series4 = stemDataVis.get("series4");
+			const series5 = stemDataVis.get("series5");
+			const series6 = stemDataVis.get("series6");
+			const series7 = stemDataVis.get("series7");
+
+			const handleClick = function(serieshidden, series, button, color) {
+				if(serieshidden) {
+					series.show();
+					$(button).css("border-color", color);
+					$(button).css("color", "black");
+				} else {
+					series.hide();
+					$(button).css("border-color", "#737373");
+					$(button).css("color", "#737373");
+				}
+			}
+
+			$("#button1").click(function() {
+				handleClick (series1hidden, series1, "#button1", colorPalette[0]);
+				series1hidden=!series1hidden;
+			})
+
+			$("#button2").click(function() {
+				handleClick (series2hidden, series2, "#button2", colorPalette[1]);
+				series2hidden=!series2hidden;
+			})
+
+			$("#button3").click(function() {
+				handleClick (series3hidden, series3, "#button3", colorPalette[2]);
+				series3hidden=!series3hidden;
+			})
+
+			$("#button4").click(function() {
+				handleClick (series4hidden, series4, "#button4", colorPalette[3]);
+				series4hidden=!series4hidden;
+			})
+
+			$("#button5").click(function() {
+				handleClick (series5hidden, series5, "#button5", colorPalette[4]);
+				series5hidden=!series5hidden;
+			})
+
+			$("#button6").click(function() {
+				handleClick (series6hidden, series6, "#button6", colorPalette[5]);
+				series6hidden=!series6hidden;
+			})
+
+			$("#button7").click(function() {
+				handleClick (series7hidden, series7, "#button7", colorPalette[6]);
+				series7hidden=!series7hidden;
+			})
+
+			$("#clear-all").click(function() {
+				for(let i=0; i<series.length; i++) {
+					series[i].hide();
+				}
+
+				series1hidden = true;
+				series2hidden = true;
+				series3hidden = true;
+				series4hidden = true;
+				series5hidden = true;
+				series6hidden = true;
+				series7hidden = true;
+
+				$(".button").css("border-color", "#737373");
+				$(".button").css("color", "#737373");
+			})
+
+			$(".button").click(function() {
+				$("#instructions").fadeOut(500);
+			})
+		</script>
+	</body>
+</html>
